@@ -1,0 +1,47 @@
+/* genes typically comprise uninterrupted stretches of DNA between 
+ * a start codon (usually ATG) and a stop codon (TAA, TGA, or TAG), 
+ * and the length of gene is a multiple of three.
+ */
+import java.util.Scanner;
+
+public class FindingGene
+{
+  public static void main(String[] args)
+  {
+	 Scanner sc = new Scanner(System.in);
+	 String inputDNA = sc.next();
+	 sc.close();
+	 int startIndex = inputDNA.indexOf("ATG");//a gene starts with ATG codon
+	 FindingGene obj = new FindingGene();
+	 int TAA = obj.findStopCodon(inputDNA,startIndex, "TAA");//a valid end codon of a gene is TAA 
+	 int TAG = obj.findStopCodon(inputDNA,startIndex, "TAG");//a valid end codon of a gene is TAG
+	 int TGA = obj.findStopCodon(inputDNA,startIndex, "TGA");//a valid end codon of a gene is TGA
+	 int minIndex = Math.min(TAA, Math.min(TAG, TGA));
+	 if (minIndex==inputDNA.length() || startIndex==-1)
+	 {
+		System.out.println("no gene found");
+	 }
+	 else 
+	 {
+		//System.out.println(minIndex);
+		System.out.println("Gene found is : " + inputDNA.substring(startIndex, minIndex+3));
+	 }
+	 
+  }
+  public int findStopCodon(String inputDna,int startIndex, String stopCodon)
+  {
+	 int currIndex  = inputDna.indexOf(stopCodon, startIndex+3);
+	 while(currIndex != -1)
+	 {
+		if ((currIndex-startIndex)%3==0)//  a valid length of gene is multiple of three
+		{
+		  return currIndex;
+		}
+		else 
+		{
+		  currIndex = inputDna.indexOf(stopCodon, currIndex+1);//updating current index
+		}
+	 }
+	 return inputDna.length();// If no valid index is found then return the length of dna so that it is the biggest number  
+  }
+}
